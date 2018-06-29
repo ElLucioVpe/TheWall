@@ -8,6 +8,8 @@ Written mainly in good ol' JS/PHP.
 
 ## Notes
 
+* Connecting to the DB
+
 connect.php is assumed to be outside of the html_public folder, so it's not included here.
 
 A basic connect.php file could be as follows:
@@ -19,6 +21,11 @@ A basic connect.php file could be as follows:
     mb_internal_encoding('UTF-8');
     mysqli_set_charset($link, "utf8");
    ```
+   
+  * Importing the database
+  
+  TheWall currently runs on MySQL. Inside the "db" folder there's everything you need to set it up or modify it.
+ 
 
 ## To-Do List
 
