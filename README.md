@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # TheWall <small>(by lucius✨💞🌷)</small>
 
 ## Introduction
@@ -34,7 +33,3 @@ A basic connect.php file could be as follows:
 [ ] Send data through JSON
 
 [ ] Deny JS tags
-=======
-# TheWall
-This idea is a virtual wall you can grafitti on then like a real wall 
->>>>>>> 5d83970df9626d4e53ae7cebb5067af9fc3703fc
