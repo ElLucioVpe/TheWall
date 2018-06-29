@@ -21,8 +21,8 @@
 
 
 <?php
-require_once 'login.php';
-$obj_conexion = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+
+require_once('../connect.php');
 if(!$obj_conexion)
 {
    // echo "<h3>No se ha podido conectar PHP - MySQL, verifique sus datos.</h3><hr><br>";

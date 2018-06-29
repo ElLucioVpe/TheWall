@@ -20,8 +20,7 @@
 
 
 <?php
-require_once 'login.php';
-$obj_conexion = mysqli_connect($db_hostname, $db_username, $db_password, $db_database);
+require_once '../connect.php';
 if(!$obj_conexion)
 {
    echo "<script>alert('Cabeza no encaraste un queso');</script>";
