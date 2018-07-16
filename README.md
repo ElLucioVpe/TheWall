@@ -4,7 +4,7 @@
 
 Simple website for writing whatever you want publicly on a website everyone can see. Original idea by [elcomix97edu](https://github.com/elcomix97edu/thewall).
 
-Written mainly in good ol' JS/PHP.
+It was written mainly in good ol' PHP but I'm currently porting it over to Go, so I made a new branch for that you can check here.
 
 ## Notes
 
@@ -30,6 +30,8 @@ A basic connect.php file could be as follows:
 ## To-Do List
 
 [ ✓ ] Alert the user when SQL connection is not working
+
+[ ] Port from PHP to Go
 
 [ ] Have a nicer CSS with animations and shit
 
