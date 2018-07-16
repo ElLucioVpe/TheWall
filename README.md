@@ -7,20 +7,6 @@ Simple website for writing whatever you want publicly on a website everyone can 
 It was written mainly in good ol' PHP but I'm currently porting it over to Go, so I made a new branch for that you can check here.
 
 ## Notes
-
-* Connecting to the DB
-
-connect.php is assumed to be outside of the html_public folder, so it's not included here.
-
-A basic connect.php file could be as follows:
-
-```
-    <?php
-    $link = mysqli_connect("localhost", "root", "password", "database");
-    mb_language('uni');
-    mb_internal_encoding('UTF-8');
-    mysqli_set_charset($link, "utf8");
-   ```
    
   * Importing the database
   
