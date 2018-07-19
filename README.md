@@ -29,16 +29,4 @@ A basic connect.php file could be as follows:
 
 ## To-Do List
 
-[ ✓ ] Alert the user when SQL connection is not working
-
-[ ] Port from PHP to Go
-
-[ ] Have a nicer CSS with animations and shit
-
-[ ] Make a JavaScript for drawing small black and white pictures a la _Splatoon_
-
-[ ] Auto detect 
-
-[ ] Send data through JSON
-
-[ ] Deny JS tags
+Currently being ported to GO. [Check progress here!](https://github.com/ElLucioVpe/TheWall/tree/go-port) ✨
