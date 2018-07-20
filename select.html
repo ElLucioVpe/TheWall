@@ -61,9 +61,9 @@
     </head>
     <body>
         <header>
-        	<form id="form" onsubmit="return false">
+        	<form id="form" method="POST" action="/">
             	<textarea  name="txtMensaje" id="txtMensaje" form="form" maxlength="280" minlength="4" placeholder="Ingrese su mensaje aquí..."></textarea>
-            	<input type="submit" value="Enviar" onclick="submitMessage()" />
+            	<input type="submit" value="Enviar" />
             </form>
         </header>
         <article>
