@@ -6,6 +6,7 @@ import (
     "html/template"
     _ "github.com/go-sql-driver/mysql"
 	"database/sql"
+	"fmt"
 )
 
 type wallPost struct  {
@@ -24,6 +25,39 @@ func main() {
 }
 
 func DisplayWebsite(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "GET":
+
+	case "POST":
+		r.ParseForm()
+		message := r.FormValue("txtMensaje")
+
+		// Abrimos conexion a MySQL
+		db, err := sql.Open("mysql", "root@tcp(localhost:3306)/thewall")
+
+		// Por si hay algun error
+		if err != nil {
+			panic(err.Error())
+		}
+
+		fmt.Println("it works :P")
+
+		sqlvalue := fmt.Sprintf("INSERT INTO messages VALUES ( NULL, '%s')", message)
+		fmt.Printf(sqlvalue)
+
+		// perform a db.Query insert
+		insert, err := db.Query(sqlvalue)
+
+		// if there is an error inserting, handle it
+		if err != nil {
+			panic(err.Error())
+		}
+
+		// be careful deferring Queries if you are using transactions
+		defer insert.Close()
+	default:
+		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
+	}
 
 	// ------------------------
 	// Recibimos datos de MySQL
@@ -61,10 +95,11 @@ func DisplayWebsite(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	Wall.Message = Data
+	Wall.Message = Data // Enviamos los mensajes al
 
 	// Cuando termine la funcion Main, cierra la conexion
 	defer db.Close()
+
 
 	// ------------------------------------
 	// Usamos el template para enviar datos
@@ -86,5 +121,30 @@ func DisplayWebsite(w http.ResponseWriter, r *http.Request) {
 }
 
 func SendMessage(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	message := r.FormValue("txtMensaje")
 
+	// Abrimos conexion a MySQL
+	db, err := sql.Open("mysql", "root@tcp(localhost:3306)/thewall")
+
+	// Por si hay algun error
+	if err != nil {
+		panic(err.Error())
+	}
+
+	fmt.Println("it works :P")
+
+	sqlvalue := fmt.Sprintf("INSERT INTO messages VALUES ( NULL, '%s')", message)
+	fmt.Printf(sqlvalue)
+
+	// perform a db.Query insert
+	insert, err := db.Query(sqlvalue)
+
+	// if there is an error inserting, handle it
+	if err != nil {
+		panic(err.Error())
+	}
+
+	// be careful deferring Queries if you are using transactions
+	defer insert.Close()
 }
