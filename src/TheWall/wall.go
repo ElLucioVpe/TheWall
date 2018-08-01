@@ -1,14 +1,22 @@
 package main
 
 import (
-    "net/http"
-    "log"
-    "html/template"
-    _ "github.com/go-sql-driver/mysql"
-    "conectarDB"
-	 //"database/sql"
-	 "fmt"
+   // local
+   "conectarDB"
+
+   // go native
+   "net/http"
+   "log"
+   "html/template"
+   "fmt"
+
+   // MySQL Driver
+   _ "github.com/go-sql-driver/mysql"
 )
+
+// -------
+// CLASSES
+// -------
 
 type wallPost struct  {
     Message []string
@@ -17,6 +25,10 @@ type wallPost struct  {
 type pageVariables struct {
 	Title string
 }
+
+// ---------
+// Functions
+// ---------
 
 func main() {
     http.HandleFunc("/", DisplayWebsite)
