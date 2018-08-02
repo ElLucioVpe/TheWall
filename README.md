@@ -53,9 +53,9 @@ v.0.1🐱‍
 
 - [x] Put some nice font ✨
 
-- [ ] Test XSS
+- [x] Test XSS
 
-- [ ] Test SQL Injection
+- [x] Test SQL Injection
 
 ***
 
