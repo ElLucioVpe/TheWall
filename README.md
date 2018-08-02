@@ -12,30 +12,7 @@ Written mainly in cool, flaming, shade-glasses looking [GO](https://golang.org/)
   * Importing the database
   
   TheWall currently runs on MySQL. Inside the "db" folder there's everything you need to set it up or modify it.
-  
-  * Connecting GO to MySQL
-  
-  Here's a template for the 'conectarDB' package:
-  
-  ~~~~
-  package conectarDB
 
-import (
-   "database/sql"
-)
-
-func Conectar() (*sql.DB, error) {
-		// Abrimos conexion a MySQL
-		db, err := sql.Open("mysql", "user:pass@tcp(localhost:3306)/theWall")
-
-		// In case there's some error
-		if err != nil {
-			panic(err.Error())
-		}
-		
-		return db, err;
-}
- ~~~~
 
 ## To-Do List
 
@@ -62,6 +39,8 @@ v.0.1🐱‍
 v.0.2 🧙
 
 - [ ] Add fade animation for new posts
+
+- [ ] Show date next to posts
 
 - [ ] Add functionality to add photos/urls
 
