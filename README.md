@@ -51,13 +51,19 @@ v.0.1🐱‍
 
 - [x] Insert date with every new post (possibly user too?)
 
-- [ ] Add fade animation for new posts
-
 - [x] Put some nice font ✨
 
-- [ ] Add functionality to add photos/urls
+- [ ] Test XSS
 
-- [ ] Don't allow HTML code
+- [ ] Test SQL Injection
+
+***
+
+v.0.2 🧙
+
+- [ ] Add fade animation for new posts
+
+- [ ] Add functionality to add photos/urls
 
 ***
 
