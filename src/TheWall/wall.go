@@ -1,129 +1,137 @@
-package main
+   package main
 
-import (
-    "net/http"
-    "log"
-    "html/template"
-    _ "github.com/go-sql-driver/mysql"
-    "conectarDB"
-	 //"database/sql"
-	 "fmt"
-)
+   import (
+      // local
+      "bdutils"
 
-type wallPost struct  {
-    Message []string
-}
+      // go native
+      "net/http"
+      "log"
+      "html/template"
+      "fmt"
 
-type pageVariables struct {
-	Title string
-}
+      // MySQL Driver
+      _ "github.com/go-sql-driver/mysql"
+   )
 
-func main() {
-    http.HandleFunc("/", DisplayWebsite)
-    http.HandleFunc("/jquery", SendJqueryJs)
-    log.Fatal(http.ListenAndServe(":80", nil))
-    
+   // -------
+   // CLASSES
+   // -------
 
-    fmt.Println("La wea esta pronta")
-    //http.HandleFunc("/submit", Submit)
-}
+   type wallPost struct  {
+       Message []string
+   }
 
-func SendJqueryJs(w http.ResponseWriter, r *http.Request) {
-    http.ServeFile(w, r, "js/jquery.js")
-}
+   type pageVariables struct {
+	   Title string
+   }
 
-func DisplayWebsite(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
+   // ---------
+   // Functions
+   // ---------
 
-	case "POST":
-		r.ParseForm()
-		message := r.FormValue("txtMensaje")
-		date := r.FormValue("txtDate")
+   func main() {
+       http.HandleFunc("/", DisplayWebsite)
+       http.HandleFunc("/jquery", SendJqueryJs)
+       log.Fatal(http.ListenAndServe(":80", nil))
+       
 
+       fmt.Println("La wea esta pronta")
+       //http.HandleFunc("/submit", Submit)
+   }
+
+   func SendJqueryJs(w http.ResponseWriter, r *http.Request) {
+       http.ServeFile(w, r, "js/jquery.js")
+   }
+
+   func DisplayWebsite(w http.ResponseWriter, r *http.Request) {
+	   switch r.Method {
+	   case "GET":
+
+	   case "POST":
+		   r.ParseForm()
+		   message := r.FormValue("txtMensaje")
+		   date := r.FormValue("txtDate")
+
+         db, err := conectarDB.Conectar()
+
+		   fmt.Println("it works :P")
+	   
+	      url := "NULL"
+
+	      //photo := "NULL"
+	      
+	      sqlStr := "INSERT INTO messages VALUES (NULL, ?, ?, ?, 0);"
+		   stmt, _ := db.Prepare(sqlStr)
+		   _, err = stmt.Exec(message, date, bdutils.NewNullString(url))
+		   
+		   if err != nil {
+			   panic(err.Error())
+		   }
+
+		   // be careful deferring Queries if you are using transactions
+		   defer db.Close()
+	   default:
+		   fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
+	   }
+
+	   // ------------------------
+	   // Recibimos datos de MySQL
+	   // ------------------------
+
+	   var Data []string // Conjunto de variables de tipo wallPost
+	   var Wall wallPost // Variable de tipo wallPost
+
+	   // Abrimos conexion a MySQL
       db, err := conectarDB.Conectar()
 
-		fmt.Println("it works :P")
-	
-	   url := "NULL"
-	   photo := "NULL"
+	   // Por si hay algun error
+	   if err != nil {
+		   panic(err.Error())
+	   }
 
-		sqlvalue := fmt.Sprintf("INSERT INTO messages VALUES (NULL, '%s', '%s', %s, %s);",
-		   message, date, url, photo)
-		fmt.Printf(sqlvalue)
+	   // Recibe datos de MySQL
+	   results, err := db.Query("SELECT valueMessages FROM messages")
+	   if err != nil {
+		   panic(err.Error())
+	   }
 
-		// perform a db.Query insert
-		insert, err := db.Query(sqlvalue)
+	   // Recorre los datos de MySQL y los devuelve como una variable data
+	   for results.Next() {
+		   var message string
 
-		// if there is an error inswall.go:8:5: cannot find package "conectarDB/conectarDB" in any of:erting, handle it
-		if err != nil {
-			panic(err.Error())
-		}
-
-
-		// be careful deferring Queries if you are using transactions
-		defer insert.Close()
-	default:
-		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
-	}
-
-	// ------------------------
-	// Recibimos datos de MySQL
-	// ------------------------
-
-	var Data []string // Conjunto de variables de tipo wallPost
-	var Wall wallPost // Variable de tipo wallPost
-
-	// Abrimos conexion a MySQL
-   db, err := conectarDB.Conectar()
-
-	// Por si hay algun error
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// Recibe datos de MySQL
-	results, err := db.Query("SELECT valueMessages FROM messages")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	// Recorre los datos de MySQL y los devuelve como una variable data
-	for results.Next() {
-		var message string
-
-		err = results.Scan(&message)
+		   err = results.Scan(&message)
 
 
-		Data = append(Data, message)
-		//log.Printf(Wall.Message)
+		   Data = append(Data, message)
+		   //log.Printf(Wall.Message)
 
-		if err != nil {
-			panic(err.Error())
-		}
-	}
+		   if err != nil {
+			   panic(err.Error())
+		   }
+	   }
 
-	Wall.Message = Data // Enviamos los mensajes al
+	   Wall.Message = Data // Enviamos los mensajes al
 
-	// Cuando termine la funcion Main, cierra la conexion
-	defer db.Close()
+	   // Cuando termine la funcion Main, cierra la conexion
+	   defer db.Close()
 
 
-	// ------------------------------------
-	// Usamos el template para enviar datos
-	// ------------------------------------
+	   // ------------------------------------
+	   // Usamos el template para enviar datos
+	   // ------------------------------------
 
-	//p := pageVariables{Title: "pene"}
+	   //p := pageVariables{Title: "pene"}
 
-    t, err := template.ParseFiles("select.html")
+       t, err := template.ParseFiles("select.html")
 
-    if err != nil {
-        log.Print("Hubo un eror mostrando esta pagina: ", err)
-    }
+       if err != nil {
+           log.Print("Hubo un eror mostrando esta pagina: ", err)
+       }
 
-    err = t.Execute(w, Wall)
+       err = t.Execute(w, Wall)
 
-    if err != nil {
-        log.Printf("Problema al enviar a HTML ", err)
-    }
-}
+       if err != nil {
+           log.Printf("Problema al enviar a HTML ", err)
+       }
+   }
