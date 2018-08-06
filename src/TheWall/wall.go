@@ -19,11 +19,8 @@
    // -------
 
    type wallPost struct  {
-       Message []string
-   }
-
-   type pageVariables struct {
-	   Title string
+       Message string
+       Date string
    }
 
    // ---------
@@ -33,7 +30,9 @@
    func main() {
        http.HandleFunc("/", DisplayWebsite)
        http.HandleFunc("/jquery", SendJqueryJs)
-       log.Fatal(http.ListenAndServe(":80", nil))
+	   http.HandleFunc("/js", SendJs)
+       http.HandleFunc("/style", SendStyle)
+       log.Fatal(http.ListenAndServe(":8080", nil))
        
 
        fmt.Println("La wea esta pronta")
@@ -41,7 +40,15 @@
    }
 
    func SendJqueryJs(w http.ResponseWriter, r *http.Request) {
-       http.ServeFile(w, r, "js/jquery.js")
+	   http.ServeFile(w, r, "js/jquery.js")
+   }
+
+   func SendJs(w http.ResponseWriter, r *http.Request) {
+	   http.ServeFile(w, r, "js/custom.js")
+   }
+
+   func SendStyle(w http.ResponseWriter, r *http.Request) {
+	   http.ServeFile(w, r, "css/style.css")
    }
 
    func DisplayWebsite(w http.ResponseWriter, r *http.Request) {
@@ -53,9 +60,9 @@
 		   message := r.FormValue("txtMensaje")
 		   date := r.FormValue("txtDate")
 
-         db, err := conectarDB.Conectar()
+         db, err := bdutils.Conectar()
 
-		   fmt.Println("it works :P")
+		   fmt.Println("-> Message succesfully written")
 	   
 	      url := "NULL"
 
@@ -79,11 +86,12 @@
 	   // Recibimos datos de MySQL
 	   // ------------------------
 
-	   var Data []string // Conjunto de variables de tipo wallPost
-	   var Wall wallPost // Variable de tipo wallPost
+	   var message string // Conjunto de variables de tipo wallPost
+	   var date string
+	   var Wall []wallPost // Variable de tipo wallPost
 
 	   // Abrimos conexion a MySQL
-      db, err := conectarDB.Conectar()
+      db, err := bdutils.Conectar()
 
 	   // Por si hay algun error
 	   if err != nil {
@@ -91,39 +99,35 @@
 	   }
 
 	   // Recibe datos de MySQL
-	   results, err := db.Query("SELECT valueMessages FROM messages")
+	   results, err := db.Query("SELECT valueMessages, dateMessages FROM messages ORDER BY dateMessages DESC;")
 	   if err != nil {
 		   panic(err.Error())
 	   }
 
 	   // Recorre los datos de MySQL y los devuelve como una variable data
 	   for results.Next() {
-		   var message string
 
-		   err = results.Scan(&message)
+		   err = results.Scan(&message, &date)
 
+		   result := wallPost{message, date}
 
-		   Data = append(Data, message)
-		   //log.Printf(Wall.Message)
+		   Wall = append(Wall, result)
 
 		   if err != nil {
 			   panic(err.Error())
 		   }
 	   }
 
-	   Wall.Message = Data // Enviamos los mensajes al
-
 	   // Cuando termine la funcion Main, cierra la conexion
 	   defer db.Close()
-
 
 	   // ------------------------------------
 	   // Usamos el template para enviar datos
 	   // ------------------------------------
 
-	   //p := pageVariables{Title: "pene"}
+	   //fmt.Println(Wall)
 
-       t, err := template.ParseFiles("select.html")
+       t, err := template.ParseFiles("index.html")
 
        if err != nil {
            log.Print("Hubo un eror mostrando esta pagina: ", err)
@@ -135,3 +139,17 @@
            log.Printf("Problema al enviar a HTML ", err)
        }
    }
+
+   /*func randomMessage (randomNumber int) string {
+   		var randomMsg string
+   		switch randomNumber {
+			case 0 :
+				randomMsg = "Diego, estás re puto 💞"
+			case 1 :
+				randomMsg = "Idea robada de Diego"
+			case 2 :
+				randomMsg = "Copyright Lucius Inc., una subsidiaria de Walt Disney"
+		}
+
+	   return randomMsg
+   }*/
