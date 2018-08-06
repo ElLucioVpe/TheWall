@@ -40,7 +40,7 @@ v.0.2 🧙
 
 - [ ] Add fade animation for new posts
 
-- [ ] Show date next to posts
+- [x] Show date next to posts
 
 - [ ] Add functionality to add photos/urls
 
