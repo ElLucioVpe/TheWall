@@ -9,6 +9,7 @@
       "log"
       "html/template"
       "fmt"
+      "math/rand"
 
       // MySQL Driver
       _ "github.com/go-sql-driver/mysql"
@@ -21,17 +22,31 @@
    type wallPost struct  {
        Message string
        Date string
+       Photo template.HTML
    }
+
+    type HtmlData struct {
+        Posts []wallPost
+        RandomFooter string
+    }
+
 
    // ---------
    // Functions
    // ---------
 
    func main() {
+	   fmt.Println("La wea esta pronta")
+
+       bdutils.Conectar()
+
        http.HandleFunc("/", DisplayWebsite)
        http.HandleFunc("/jquery", SendJqueryJs)
 	   http.HandleFunc("/js", SendJs)
        http.HandleFunc("/style", SendStyle)
+       http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
+       http.Handle("/upload/", http.StripPrefix("/upload/", http.FileServer(http.Dir("upload"))))
+
        log.Fatal(http.ListenAndServe(":8080", nil))
        
 
@@ -56,28 +71,11 @@
 	   case "GET":
 
 	   case "POST":
-		   r.ParseForm()
-		   message := r.FormValue("txtMensaje")
-		   date := r.FormValue("txtDate")
+        //r.ParseForm()
 
-         db, err := bdutils.Conectar()
+        bdutils.Insert(w,r)
 
-		   fmt.Println("-> Message succesfully written")
-	   
-	      url := "NULL"
-
-	      //photo := "NULL"
-	      
-	      sqlStr := "INSERT INTO messages VALUES (NULL, ?, ?, ?, 0);"
-		   stmt, _ := db.Prepare(sqlStr)
-		   _, err = stmt.Exec(message, date, bdutils.NewNullString(url))
-		   
-		   if err != nil {
-			   panic(err.Error())
-		   }
-
-		   // be careful deferring Queries if you are using transactions
-		   defer db.Close()
+        fmt.Println("-> Message succesfully written")
 	   default:
 		   fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	   }
@@ -87,19 +85,15 @@
 	   // ------------------------
 
 	   var message string // Conjunto de variables de tipo wallPost
-	   var date string
+       var date string
+       var photo string
 	   var Wall []wallPost // Variable de tipo wallPost
 
 	   // Abrimos conexion a MySQL
-      db, err := bdutils.Conectar()
-
-	   // Por si hay algun error
-	   if err != nil {
-		   panic(err.Error())
-	   }
+      db := bdutils.Conectar()
 
 	   // Recibe datos de MySQL
-	   results, err := db.Query("SELECT valueMessages, dateMessages FROM messages ORDER BY dateMessages DESC;")
+	   results, err := db.Query("SELECT valueMessages, dateMessages, COALESCE(photoMessages, '') FROM messages ORDER BY dateMessages DESC;")
 	   if err != nil {
 		   panic(err.Error())
 	   }
@@ -107,9 +101,10 @@
 	   // Recorre los datos de MySQL y los devuelve como una variable data
 	   for results.Next() {
 
-		   err = results.Scan(&message, &date)
-
-		   result := wallPost{message, date}
+           err = results.Scan(&message, &date, &photo)
+           
+		   result := wallPost{message, date, template.HTML(photo)}
+           log.Print("Aaaaaaaaa: ", result.Photo)
 
 		   Wall = append(Wall, result)
 
@@ -124,8 +119,8 @@
 	   // ------------------------------------
 	   // Usamos el template para enviar datos
 	   // ------------------------------------
-
-	   //fmt.Println(Wall)
+       
+       data := HtmlData{Wall, randomMessage()}
 
        t, err := template.ParseFiles("index.html")
 
@@ -133,14 +128,17 @@
            log.Print("Hubo un eror mostrando esta pagina: ", err)
        }
 
-       err = t.Execute(w, Wall)
+       err = t.Execute(w, data)
 
        if err != nil {
            log.Printf("Problema al enviar a HTML ", err)
        }
    }
 
-   /*func randomMessage (randomNumber int) string {
+   func randomMessage() string {
+        min := 0
+        max := 3
+        randomNumber := rand.Intn(max - min) + min;
    		var randomMsg string
    		switch randomNumber {
 			case 0 :
@@ -148,8 +146,17 @@
 			case 1 :
 				randomMsg = "Idea robada de Diego"
 			case 2 :
-				randomMsg = "Copyright Lucius Inc., una subsidiaria de Walt Disney"
+                randomMsg = "Copyright Lucius Inc., una subsidiaria de Walt Disney"
+            case 3 :
+                randomMsg = "uwu"
+            case 4 :
+                randomMsg = "El código está en GitHub"
+            case 5 :
+                randomMsg = "Powered by Go, viejo"
+            case 6 :
+                randomMsg = "Si algo se rompe es culpa de Rigby 😞"
+            case 7 :
+                randomMsg = "🤠"
 		}
-
 	   return randomMsg
-   }*/
+   }

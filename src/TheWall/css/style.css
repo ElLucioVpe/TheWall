@@ -1,43 +1,120 @@
-*{
-    box-shadow: none;
-    outline: none;
+* {
+  box-shadow: none;
+  outline: none;
 }
 
 @font-face {
-    font-family: "Montserrat";
+  font-family: "Montserrat";
 }
 
-textarea{
-    border: 2px solid #1dcaff;
-    width: 40%;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    resize: none;
+@media only screen and (min-width: 768px) {
+  header {
+    max-width: 768px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+textarea {
+  border: 2px solid #1dcaff;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  resize: none;
+  width: 60%;
+  font-family: "Montserrat", serif;
+  padding: 15px;
 }
 
 body {
-    font-family: 'Montserrat', serif;
+  font-family: "Montserrat", serif;
 }
 
 header {
-    text-align: center;
+  text-align: center;
 }
 
 article {
-    text-align: center;
+  text-align: center;
 }
 
 .thDate {
-    font-weight: lighter;
-    color: grey;
+  font-weight: lighter;
+  color: grey;
 }
 
 footer {
-    position: fixed;
-    left: 0;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    font-size: 15px;
+  position: fixed;
+  left: 0;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+}
+
+button[type="submit"] {
+  height: 67px;
+  top: -28px;
+  position: relative;
+  border-radius: 5px;
+  border: 2px solid #1dcaff;
+  background: none;
+  width: 10%;
+}
+
+button.imgUpload {
+  height: 67px;
+  width: 10%;
+  top: -2px;
+  position: relative;
+  border-radius: 5px;
+  border: none;
+  border: 2px solid #1dcaff;
+  background-color: white;
+  background-image: url(/img/upload.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#imgInp {
+  display: none;
+}
+
+table th {
+  width: 50%;
+}
+
+img {
+  height: 150px;
+  width: 250px;
+  border-radius: 15px;
+  object-fit: cover;
+  margin-bottom: -5px;
+}
+
+#posts {
+  max-width: 768px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post {
+  display: flex;
+  background-color: #1dcaff;
+  margin: 20px 0px;
+  border-radius: 20px;
+  max-height: 151px;
+  align-items: center;
+}
+
+.message {
+  flex-grow: 2;
+  vertical-align: middle;
+  display: table;
+}
+
+.vertical {
+  vertical-align: middle;
+  display: table-cell;
+  max-height: 150px;
 }

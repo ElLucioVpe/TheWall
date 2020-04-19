@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>PUTOOOO</title>
-        <link href="/style" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet"> 
-        <script type="text/javascript" src="/jquery"></script>
-        <script type="text/javascript" src="/js"></script>
-    </head>
-    <body>
-        <header>
-        	<form id="form" method="POST" action="/">
-            	<textarea  name="txtMensaje" id="txtMensaje" form="form" maxlength="280" minlength="4" placeholder="Ingrese su mensaje aquí..."></textarea>
-            	<input type="hidden" name="txtDate" id="txtDate"/>
-            	<input type="submit" value="Enviar" />
-            </form>
-        </header>
-        <article>
-            <table style="width:100%" align="center">
-                {{range .}}
-                <tr>
-                    <th align="right">
-                        {{.Message}}
-                    </th>
-                    <th align="left" class="thDate">
-                        <small>{{.Date}}</small>
-                    </th>
-                </tr>
-                {{end}}
-            </table>
-        </article>
-        <footer>
-            <span>Diego, estás re puto 💞</span>
-        </footer>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wall</title>
+    <link href="/style" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat"
+      rel="stylesheet"
+    />
+    <script type="text/javascript" src="/jquery"></script>
+    <script type="text/javascript" src="/js"></script>
+  </head>
+  <body>
+    <header>
+      <form id="form" method="POST" enctype="multipart/form-data" action="/">
+        <textarea
+          name="message"
+          id="txtMensaje"
+          form="form"
+          maxlength="280"
+          minlength="4"
+          placeholder="Ingrese su mensaje aquí..."
+        ></textarea>
+        <input id="imgInp" type="file" name="image" />
+        <button
+          class="imgUpload"
+          value="imgUpload"
+          id="imgUpload"
+          type="button"
+          onclick="document.getElementById('imgInp').click();"
+        ></button>
+        <button type="submit" form="form" value="Enviar">Enviar</button>
+      </form>
+    </header>
+    <article>
+      <div id="posts">
+        {{range .Posts}}
+        <div class="post">
+          <div class="message">
+            <div class="vertical">
+              {{.Message}}
+              <small>{{.Date}}</small>
+            </div>
+          </div>
+          <div class="photo">
+            <img src="{{.Photo}}" alt="" />
+          </div>
+        </div>
+        {{end}}
+      </div>
+    </article>
+    <footer>
+      <span>{{.RandomFooter}}</span>
+    </footer>
+  </body>
 </html>
