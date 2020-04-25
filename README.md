@@ -4,7 +4,7 @@
 
 Simple website for writing whatever you want publicly on a website everyone can see. Original idea by [elcomix97edu](https://github.com/elcomix97edu/thewall).
 
-Written mainly in [GO](https://golang.org/).
+Rewritten in [GO](https://golang.org/).
 
 
 ## Notes
