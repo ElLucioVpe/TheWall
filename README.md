@@ -1,10 +1,10 @@
-# TheWall <small>(by lucius✨💞🌷)</small>
+# TheWall <small>(by lucius✨)</small>
 
 ## Introduction
 
 Simple website for writing whatever you want publicly on a website everyone can see. Original idea by [elcomix97edu](https://github.com/elcomix97edu/thewall).
 
-Written mainly in cool, flaming, shade-glasses looking [GO](https://golang.org/).
+Written mainly in [GO](https://golang.org/).
 
 
 ## Notes
